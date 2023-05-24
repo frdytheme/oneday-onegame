@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/oneday-onegame/static/css/main.8891adaf.css",
+    "main.js": "/oneday-onegame/static/js/main.eb9ecf16.js",
+    "static/media/memorygame.webm": "/oneday-onegame/static/media/memorygame.b095b708c77d494d16f3.webm",
+    "static/media/bullsandcows.webm": "/oneday-onegame/static/media/bullsandcows.ead229c03ab644d688b7.webm",
+    "index.html": "/oneday-onegame/index.html",
+    "main.8891adaf.css.map": "/oneday-onegame/static/css/main.8891adaf.css.map",
+    "main.eb9ecf16.js.map": "/oneday-onegame/static/js/main.eb9ecf16.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8891adaf.css",
+    "static/js/main.eb9ecf16.js"
+  ]
+}
