@@ -10,7 +10,6 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/bullsandcows" element={<BullAndCows />} />
       </Routes>
-      {/* <BullAndCows /> */}
     </>
   );
 }

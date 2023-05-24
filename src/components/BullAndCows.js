@@ -153,8 +153,9 @@ const BullAndCows = () => {
           <li>입력한 숫자가 정답에 포함되며 위치가 같으면 "Strike!"</li>
           <li>예를 들어 정답이 1234일 때, 입력한 값이 4251이라면 "2 Strike", "1 Ball"이며</li>
           <li>"2S1B"로 힌트가 나타납니다.</li>
-          <li>게임 라운드마다 받은 힌트는 오른쪽에 표시됩니다.</li>
-          <li>그럼 시작합니다.</li>
+          <li>게임 라운드마다 받은 힌트는 오른쪽에 표시되며</li>
+          <li>첫 번째 자리수에는 0이 등장하지 않습니다.</li>
+          <li>그럼 시작하겠습니다.</li>
         </ul>
       )}
       {showLevel && (
@@ -203,22 +204,24 @@ const BullAndCows = () => {
           </li>
         ))}
       </ul>
-      <ul id="menu">
-        <li id="restart" onClick={resetGame}>
-          다시하기
-        </li>
-        <li
-          id="level_btn"
-          onClick={() => {
-            inputValue.current = [];
-            setShowLevel(true);
-            setRecordNum(0);
-            setRoundHint([]);
-          }}>
-          난이도 선택
-        </li>
-      </ul>
-      <p id="record">RECORD : {recordNum} Round</p>
+      {Boolean(isLevel) && (
+        <ul id="menu">
+          <li id="restart" onClick={resetGame}>
+            다시하기
+          </li>
+          <li
+            id="level_btn"
+            onClick={() => {
+              inputValue.current = [];
+              setShowLevel(true);
+              setRecordNum(0);
+              setRoundHint([]);
+            }}>
+            난이도 선택
+          </li>
+        </ul>
+      )}
+      {Boolean(isLevel) && <p id="record">RECORD : {recordNum} Round</p>}
     </Container>
   );
 };

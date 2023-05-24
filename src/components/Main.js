@@ -1,32 +1,113 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import "../assets/fonts/font.css";
+import memoryGame from "../assets/videos/memorygame.webm";
+import gameDB from "../DB/GameDB";
 
 function Main() {
   const navigate = useNavigate();
+  const [gameNum, setGameNum] = useState(0);
   return (
     <MainPage>
-      <li onClick={() => navigate("/bullsandcows")}>카드뒤집기</li>
-      <li>숫자야구</li>
+      <div id="game_list">
+        <p>MINI GAME</p>
+        <ul>
+          {gameDB.map((game) => (
+            <li key={game.id} onClick={() => setGameNum(game.id)}>
+              {game.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div id="game_info">
+        <video src={gameDB[gameNum].video} loop autoPlay muted></video>
+        {gameDB[gameNum].des.split("/").map((des, idx) => (
+          <p key={idx}>{des}</p>
+        ))}
+      </div>
+      {
+        gameDB[gameNum].url ?
+      (<a id="play_btn" href={gameDB[gameNum].url} target="_blank">
+        PLAY
+      </a>)
+      :
+      <div id="play_btn" onClick={() => navigate(gameDB[gameNum].nav)}>
+        PLAY
+      </div>
+      }
     </MainPage>
   );
 }
 
-const MainPage = styled.ul`
+const MainPage = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #000;
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  align-items: center;
-  li {
-    width: 30%;
-    height: 40%;
-    background-color: #fff;
-    color: #000;
+  font-family: "Neo", serif;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 8fr 2fr;
+  color: #fff;
+  div, a {
+    border: 1px solid #fff;
+  }
+  #game_list {
+    font-size: 48px;
+    text-align: center;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    grid-row: span 2;
+    position: relative;
+    p {
+      font-size: 100px;
+      position: absolute;
+      top: 80px;
+    }
+    li {
+      margin: 15px 0;
+      opacity: 0.5;
+      position: relative;
+      &:hover {
+        cursor: pointer;
+        opacity: 1;
+        &::after {
+          content: "";
+          position: absolute;
+          width: 0;
+          height: 0;
+          border: 15px solid transparent;
+          border-right-color: #fff;
+          right: -50px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+  #game_info {
+    video {
+      width: 100%;
+    }
+    p {
+      text-align: center;
+      margin-top: 10px;
+    }
+  }
+  #play_btn {
+    grid-column: 2 / 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px;
+    cursor: pointer;
+    opacity: 0.5;
+    text-decoration: none;
+    color: inherit;
     &:hover {
-      cursor: pointer;
+      opacity: 1;
     }
   }
 `;
