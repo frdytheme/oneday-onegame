@@ -2,19 +2,24 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "../assets/fonts/font.css";
-import memoryGame from "../assets/videos/memorygame.webm";
 import gameDB from "../DB/GameDB";
 
 function Main() {
   const navigate = useNavigate();
   const [gameNum, setGameNum] = useState(0);
+  const checkGame = (e, game) => {
+    const games = document.querySelectorAll("#game_list ul li");
+    setGameNum(game.id);
+    games.forEach((game) => game.classList.remove("checked"));
+    e.target.classList.add("checked");
+  };
   return (
     <MainPage>
       <div id="game_list">
         <p>MINI GAME</p>
         <ul>
           {gameDB.map((game) => (
-            <li key={game.id} onClick={() => setGameNum(game.id)}>
+            <li key={game.id} onClick={(e) => checkGame(e, game)}>
               {game.name}
             </li>
           ))}
@@ -26,16 +31,15 @@ function Main() {
           <p key={idx}>{des}</p>
         ))}
       </div>
-      {
-        gameDB[gameNum].url ?
-      (<a id="play_btn" href={gameDB[gameNum].url} target="_blank">
-        PLAY
-      </a>)
-      :
-      <div id="play_btn" onClick={() => navigate(gameDB[gameNum].nav)}>
-        PLAY
-      </div>
-      }
+      {gameDB[gameNum].url ? (
+        <a id="play_btn" href={gameDB[gameNum].url} target="_blank">
+          PLAY
+        </a>
+      ) : (
+        <div id="play_btn" onClick={() => navigate(gameDB[gameNum].nav)}>
+          PLAY
+        </div>
+      )}
     </MainPage>
   );
 }
@@ -49,7 +53,8 @@ const MainPage = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: 8fr 2fr;
   color: #fff;
-  div, a {
+  div,
+  a {
     border: 1px solid #fff;
   }
   #game_list {
@@ -70,8 +75,7 @@ const MainPage = styled.div`
       margin: 15px 0;
       opacity: 0.5;
       position: relative;
-      &:hover {
-        cursor: pointer;
+      &.checked {
         opacity: 1;
         &::after {
           content: "";
@@ -84,6 +88,10 @@ const MainPage = styled.div`
           top: 50%;
           transform: translateY(-50%);
         }
+      }
+      &:hover {
+        cursor: pointer;
+        opacity: 1;
       }
     }
   }
