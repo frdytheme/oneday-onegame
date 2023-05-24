@@ -11,8 +11,14 @@ const BullAndCows = () => {
   const [isLevel, setIsLevel] = useState(0);
   const [showLevel, setShowLevel] = useState(false);
   const [showRules, setShowRules] = useState(true);
+  const [recordNum, setRecordNum] = useState(0);
 
-  /* ----------game rules ---------- */
+  /* 
+    game rules
+    onClick과 연결된 isRules 메서드로
+    배경 클릭 시 인덱스 1씩 증가하며 룰 li 순차 출력
+    가장 마지막 인덱스가 끝나면 showRules가 false로 룰 요소 숨김 -> showLevel은 true 난이도 선택 창 출력
+  */
   const rules = document.querySelectorAll("#game_rules li");
   let rulesIdx = 0;
 
@@ -27,7 +33,11 @@ const BullAndCows = () => {
     });
   };
 
-  /* ----- 난이도 선택 ----- */
+  /*
+    난이도 선택
+    매개변수로 난이도에 맞는 length를 받아 isLevel state변경
+    length에 맞는 input 요소 생성
+  */
   const choiceLevel = (length) => {
     setShowLevel(false);
     setIsLevel(length);
@@ -36,7 +46,12 @@ const BullAndCows = () => {
     }
   };
 
-  /* ----- start game -----  */
+  /*
+    start game
+    isLevel state값에 맞는 랜덤 숫자 배열 생성
+    while문과 if문으로 중복되지 않는 숫자 생성, 첫번째 숫자가 0일 시 랜덤 숫자로 변경
+    생성된 배열을 gameNum state에 할당
+  */
   const createNum = () => {
     const arr = [];
 
@@ -55,11 +70,15 @@ const BullAndCows = () => {
     setGameNum(arr);
   };
 
+  // 난이도가 변경될 때마다 새로운 정답 배열 생성.
   useEffect(() => {
     createNum();
   }, [isLevel]);
 
-  /* ----- input focus ----- */
+  /*
+    input focus
+    최초 입력 시 순차적으로 input에 포커스
+  */
   const inputArr = document.querySelectorAll("#input_num input");
   const nextFocus = (index, value) => {
     if (index < inputArr.length - 1 && value) {
@@ -67,6 +86,13 @@ const BullAndCows = () => {
     }
   };
 
+  /*
+    submit 메서드
+    1. input요소가 하나라도 비어있을 시 alert 출력
+    2. 정답 배열과 비교할 숫자 배열을 만들기 위해 (입력받은 값 * 1) map 사용
+    3. 입력했던 값을 라운드힌트에 출력하기 위해 문자열로 userValue 변수 할당
+    4. forEach로 정답 배열과 입력 배열을 비교해 Strike, Ball 변경    
+  */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputValue.current.includes("")) {
@@ -88,6 +114,7 @@ const BullAndCows = () => {
         }
       });
     });
+    // 비교한 결과에 따라 맞는 힌트 or 답 출력
     if (Strike || Ball) {
       if (!Strike) {
         setRoundHint([...roundHint, { value: userValue, hint: Ball + "B" }]);
@@ -97,6 +124,7 @@ const BullAndCows = () => {
           alert("정답입니다!!");
           lockBtn.current.forEach((lock) => lock.classList.add("locked"));
           inputEl.current.forEach((input) => (input.disabled = true));
+          // 클리어 라운드 수 기록.
           setRecordNum((prevRound) => {
             if (prevRound > roundHint.length + 1 || prevRound === 0) {
               return roundHint.length + 1;
@@ -104,7 +132,6 @@ const BullAndCows = () => {
               return prevRound;
             }
           });
-          console.log(recordNum);
         }
       } else {
         setRoundHint([...roundHint, { value: userValue, hint: Strike + "S" + Ball + "B" }]);
@@ -114,6 +141,7 @@ const BullAndCows = () => {
     }
   };
 
+  // 스트라이크가 확실한 input창 잠금 기능
   const toggleLock = (e) => {
     if (e.target.classList.contains("locked")) {
       e.target.classList.remove("locked");
@@ -124,6 +152,7 @@ const BullAndCows = () => {
     }
   };
 
+  // 다시하기 버튼
   const resetGame = () => {
     if (showLevel) {
       alert("난이도를 먼저 선택하세요");
@@ -138,8 +167,6 @@ const BullAndCows = () => {
     });
     setRoundHint([]);
   };
-
-  const [recordNum, setRecordNum] = useState(0);
 
   return (
     <Container>
